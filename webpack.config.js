@@ -19,13 +19,21 @@ module.exports = {
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
-    fallback: { "crypto": false },
+     fallback: {
+      crypto: false,
+      stream: false,
+      path: false,
+      fs: false
+    },
+  },
+  performance: {
+    hints: false
   },
   output: {
     path: path.resolve(__dirname, "./dist/bundle"),
     // The filename needs to match the index.web.d.ts declarations file.
     filename: "index.js",
-    library: "skynet",
+    library: "s5-utils",
     libraryTarget: "umd",
   },
 };
