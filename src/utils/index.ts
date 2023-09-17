@@ -64,15 +64,6 @@ export type {
   EncryptedFileUrlResponse,
 } from "./decrypt";
 
-// encryptV1 exports.
-export {
-  generateKeyXchacha20,
-  encryptFileXchacha20,
-  getXchacha20KeyAndClear,
-  encryptFileV1,
-  generateEncryptedCIDFromMHash,
-} from "./encryptV1";
-
 // encryptV2 exports.
 export {
   chunkSizeAsPowerOf2,

@@ -25,9 +25,7 @@ export async function generate_key() {
  */
 export async function generate_key_From_Seed(seedString) {
     await sodium.ready;
-    // Ensure the seed string is encoded as UTF-8 before generating the key.
     const seedBytes = sodium.from_string(seedString);
-    // Use the seed bytes to generate the key.
     const encryptKey = sodium.crypto_generichash(sodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES, seedBytes);
     return encryptKey;
 }
@@ -62,20 +60,13 @@ export async function encrypt_file_xchacha20(inputFile, key, padding, chunkIndex
  * @returns A new Uint8Array that contains the concatenated values.
  */
 export function concatUint8Arrays(arrays) {
-    // Calculate the total length of the concatenated array
     const totalLength = arrays.reduce((acc, array) => acc + array.length, 0);
-    // Create a new Uint8Array with the calculated total length
     const result = new Uint8Array(totalLength);
-    // Initialize the offset to keep track of the position within the result array
     let offset = 0;
-    // Iterate over each Uint8Array in the input array
     for (const array of arrays) {
-        // Set the current Uint8Array at the corresponding position in the result array
         result.set(array, offset);
-        // Update the offset by adding the length of the current Uint8Array
         offset += array.length;
     }
-    // Return the concatenated Uint8Array
     return result;
 }
 /**
@@ -85,32 +76,22 @@ export function concatUint8Arrays(arrays) {
  * @returns {Promise<{ b3hash: Buffer; encryptedFileSize: number }>} A Promise that resolves to an object containing the hash value and the size of the encrypted file.
  */
 export async function calculateB3hashFromFileEncrypt(file, encryptedKey) {
-    // Create a hash object
     const hasher = await blake3.create({});
-    // Define the chunk size (1 MB)
-    const chunkSize = 262144; // 256 KB;
-    // Initialize the position to 0
+    const chunkSize = 262144;
     let position = 0;
     let encryptedFileSize = 0;
     let chunkIndex = 0;
-    // Process the file in chunks
     while (position <= file.size) {
-        // Slice the file to extract a chunk
         const chunk = file.slice(position, position + chunkSize);
-        // Convert chunk's ArrayBuffer to hex string and log it
         const chunkArrayBuffer = await chunk.arrayBuffer();
         const chunkUint8Array = new Uint8Array(chunkArrayBuffer);
         const encryptedChunkUint8Array = await encrypt_file_xchacha20(chunkUint8Array, encryptedKey, 0x0, chunkIndex);
         encryptedFileSize += encryptedChunkUint8Array.length;
-        // Update the hash with the chunk's data
         hasher.update(encryptedChunkUint8Array);
-        // Move to the next position
         position += chunkSize;
         chunkIndex++;
     }
-    // Obtain the final hash value
     const b3hash = hasher.digest();
-    // Return the hash value as a Promise resolved to a Buffer
     return { b3hash: Buffer.from(b3hash), encryptedFileSize };
 }
 /**
@@ -127,8 +108,6 @@ export function getKeyFromEncryptedCid(encryptedCid) {
     else {
         cidWithoutExtension = encryptedCid;
     }
-    console.log("getKeyFromEncryptedCid: encryptedCid = ", encryptedCid);
-    console.log("getKeyFromEncryptedCid: cidWithoutExtension = ", cidWithoutExtension);
     cidWithoutExtension = cidWithoutExtension.slice(1);
     const cidBytes = convertBase64urlToBytes(cidWithoutExtension);
     const startIndex = CID_TYPE_ENCRYPTED_LENGTH +
@@ -148,7 +127,6 @@ export function getKeyFromEncryptedCid(encryptedCid) {
 export function removeKeyFromEncryptedCid(encryptedCid) {
     const extensionIndex = encryptedCid.lastIndexOf(".");
     const cidWithoutExtension = extensionIndex === -1 ? encryptedCid : encryptedCid.slice(0, extensionIndex);
-    // remove 'u' prefix as well
     const cidWithoutExtensionBytes = convertBase64urlToBytes(cidWithoutExtension.slice(1));
     const part1 = cidWithoutExtensionBytes.slice(0, CID_TYPE_ENCRYPTED_LENGTH +
         ENCRYPTION_ALGORITHM_LENGTH +
@@ -191,9 +169,7 @@ export function combineKeytoEncryptedCid(key, encryptedCidWithoutKey) {
  */
 export function convertBytesToBase64url(hashBytes) {
     const mHash = Buffer.from(hashBytes);
-    // Convert the hash Buffer to a Base64 string
     const hashBase64 = mHash.toString("base64");
-    // Make the Base64 string URL-safe
     const hashBase64url = hashBase64.replace(/\+/g, "-").replace(/\//g, "_").replace("=", "");
     return hashBase64url;
 }
@@ -203,15 +179,11 @@ export function convertBytesToBase64url(hashBytes) {
  * @returns {Uint8Array} - The Uint8Array containing the bytes.
  */
 export function convertBase64urlToBytes(b64url) {
-    // Convert the URL-safe Base64 string to a regular Base64 string
     let b64 = b64url.replace(/-/g, "+").replace(/_/g, "/");
-    // Add missing padding
     while (b64.length % 4) {
         b64 += "=";
     }
-    // Convert Base64 string to Buffer
     const buffer = Buffer.from(b64, "base64");
-    // Convert Buffer to Uint8Array
     const mHash = Uint8Array.from(buffer);
     return mHash;
 }
@@ -261,11 +233,8 @@ export async function encryptFile(file, filename, encryptedKey, cid) {
         };
     });
     const fileContents = new Uint8Array(reader.result);
-    // Call the function to encrypt the file
     const encryptedFileBytes = await encrypt_file_xchacha20(fileContents, encryptedKey, 0x0);
-    // Convert Uint8Array to Blob
     const blob = new Blob([encryptedFileBytes], { type: "application/octet-stream" });
-    // Convert Blob to File
     const encryptedFile = new File([blob], filename, { type: "application/octet-stream", lastModified: Date.now() });
     const b3hash = await calculateB3hashFromFile(encryptedFile);
     const encryptedBlobHash = Buffer.concat([Buffer.alloc(1, mhashBlake3Default), b3hash]);
@@ -287,8 +256,6 @@ export async function encryptFile(file, filename, encryptedKey, cid) {
  * @returns A ReadableStreamDefaultReader for a ReadableStream of encrypted data from the provided File object.
  */
 export function getEncryptedStreamReader(file, encryptedKey) {
-    // Creates a ReadableStream from a File object, encrypts the stream using a transformer,
-    // and returns a ReadableStreamDefaultReader for the encrypted stream.
     const fileStream = file.stream();
     const transformerEncrypt = getTransformerEncrypt(encryptedKey);
     const encryptedFileStream = fileStream.pipeThrough(transformerEncrypt);

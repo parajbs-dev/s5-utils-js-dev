@@ -4,7 +4,6 @@ export type { ResponseAllCidsFromCid } from "./utils/blake3tools";
 export { createVideoElementFromBlob, createVideoPageInNewTab, createDownloadFromBlob, } from "./utils/blobtools";
 export { decryptFileXchacha20, hashStream, decryptStream, decryptFile, compareB3hash, getEncryptedFileUrl, decodeEndian, hashToBase64UrlNoPadding, _base64ToUint8Array, streamingUrlCache, getStreamingLocation, getS5LocationsApiHost, checkOptsLocationsAPI, } from "./utils/decrypt";
 export type { DecryptedBlobObject, EncryptionMetadata, EncryptedFileUrlResponse, } from "./utils/decrypt";
-export { generateKeyXchacha20, encryptFileXchacha20, getXchacha20KeyAndClear, encryptFileV1, generateEncryptedCIDFromMHash, } from "./utils/encryptV1";
 export { chunkSizeAsPowerOf2, CID_TYPE_ENCRYPTED_LENGTH, ENCRYPTION_ALGORITHM_LENGTH, CHUNK_LENGTH_AS_POWEROF2_LENGTH, ENCRYPTED_BLOB_HASH_LENGTH, KEY_LENGTH, generate_key, generate_key_From_Seed, encrypt_file_xchacha20, concatUint8Arrays, calculateB3hashFromFileEncrypt, getKeyFromEncryptedCid, removeKeyFromEncryptedCid, combineKeytoEncryptedCid, convertBytesToBase64url, convertBase64urlToBytes, createEncryptedCid, encryptFile, getEncryptedStreamReader, getTransformerEncrypt, } from "./utils/encryptV2";
 export { getFileMimeType } from "./utils/file";
 export { trimPrefix, trimSuffix } from "./utils/string";

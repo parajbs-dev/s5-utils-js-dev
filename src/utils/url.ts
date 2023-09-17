@@ -1,6 +1,3 @@
-import urljoin from "url-join";
-import parse from "url-parse";
-
 import { trimSuffix } from "./string";
 import { throwValidationError } from "./validation";
 
@@ -48,25 +45,29 @@ export function addUrlSubdomain(url: string, subdomain: string): string {
  * @returns The first subdomain of the URL, or null if there is no subdomain.
  */
 export function getSubdomainFromUrl(url: string): string | null {
-  // Use a regular expression to match the first subdomain in the URL.
   const subdomain = url.match(/^(?:https?:\/\/)?([^./]+)\./i);
-
-  // If a subdomain was found, return it. Otherwise, return null.
   return subdomain ? subdomain[1] : null;
 }
 
 /**
- * Adds a query to the given URL.
- * @param url - The URL.
- * @param query - The query parameters.
- * @returns - The final URL.
+ * Adds or updates query parameters in a URL without using url-parse.
+ * @param url - The original URL.
+ * @param query - The query parameters to add or update.
+ * @returns The modified URL with the updated query parameters.
  */
 export function addUrlQuery(url: string, query: { [key: string]: string | undefined }): string {
-  const parsed = parse(url, true);
-  // Combine the desired query params with the already existing ones.
-  query = { ...parsed.query, ...query };
-  parsed.set("query", query);
-  return parsed.toString();
+  const urlObj = new URL(url);
+  for (const key in query) {
+    if (Object.prototype.hasOwnProperty.call(query, key)) {
+      const value = query[key];
+      if (value !== undefined) {
+        urlObj.searchParams.set(key, value);
+      } else {
+        urlObj.searchParams.delete(key);
+      }
+    }
+  }
+  return urlObj.toString();
 }
 
 /**
@@ -103,7 +104,6 @@ export function ensureUrlPrefix(url: string): string {
   if (url === "localhost") {
     return "http://localhost/";
   }
-
   if (!/^https?:(\/\/)?/i.test(url)) {
     return `https://${url}`;
   }
@@ -111,14 +111,27 @@ export function ensureUrlPrefix(url: string): string {
 }
 
 /**
- * Properly joins paths together to create a URL. Takes a variable number of
- * arguments.
- * @param args - Array of URL parts to join.
- * @returns - Final URL constructed from the input parts.
+ * Create a URL by joining multiple path segments.
+ * @param args - An array of string path segments to join.
+ * @returns The joined URL as a string.
  */
 export function makeUrl(...args: string[]): string {
   if (args.length === 0) {
     throwValidationError("args", args, "parameter", "non-empty");
   }
-  return ensureUrl(args.reduce((acc, cur) => urljoin(acc, cur)));
+  return ensureUrl(args.reduce((acc, cur) => joinPathSegments(acc, cur)));
 }
+
+/**
+ * Join two path segments, ensuring there is a single '/' between them.
+ * @param segment1 - The first path segment.
+ * @param segment2 - The second path segment.
+ * @returns The joined path.
+ */
+function joinPathSegments(segment1: string, segment2: string): string {
+  // Remove trailing '/' from segment1 and leading '/' from segment2 to ensure a single '/' separator
+  const cleanedSegment1 = segment1.replace(/\/+$/, '');
+  const cleanedSegment2 = segment2.replace(/^\/+/, '');
+  return `${cleanedSegment1}/${cleanedSegment2}`;
+}
+

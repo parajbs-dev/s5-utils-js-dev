@@ -28,10 +28,10 @@ export declare function addUrlSubdomain(url: string, subdomain: string): string;
  */
 export declare function getSubdomainFromUrl(url: string): string | null;
 /**
- * Adds a query to the given URL.
- * @param url - The URL.
- * @param query - The query parameters.
- * @returns - The final URL.
+ * Adds or updates query parameters in a URL without using url-parse.
+ * @param url - The original URL.
+ * @param query - The query parameters to add or update.
+ * @returns The modified URL with the updated query parameters.
  */
 export declare function addUrlQuery(url: string, query: {
     [key: string]: string | undefined;
@@ -56,10 +56,9 @@ export declare function ensureUrl(url: string): string;
  */
 export declare function ensureUrlPrefix(url: string): string;
 /**
- * Properly joins paths together to create a URL. Takes a variable number of
- * arguments.
- * @param args - Array of URL parts to join.
- * @returns - Final URL constructed from the input parts.
+ * Create a URL by joining multiple path segments.
+ * @param args - An array of string path segments to join.
+ * @returns The joined URL as a string.
  */
 export declare function makeUrl(...args: string[]): string;
 //# sourceMappingURL=url.d.ts.map

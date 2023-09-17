@@ -1,5 +1,4 @@
 import mime from "mime/lite";
-import path from "path-browserify";
 
 import { trimPrefix } from "./string";
 
@@ -11,9 +10,9 @@ import { trimPrefix } from "./string";
  */
 export function getFileMimeType(file: File): string {
   if (file.type) return file.type;
-  let ext = path.extname(file.name);
-  ext = trimPrefix(ext, ".");
-  if (ext !== "") {
+  let ext = file.name.split(".").pop();
+  if (ext) {
+    ext = trimPrefix(ext, ".");
     const mimeType = mime.getType(ext);
     if (mimeType) {
       return mimeType;

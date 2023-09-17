@@ -26,9 +26,7 @@ export const KEY_LENGTH = 32;
  */
 export async function generate_key(): Promise<Uint8Array> {
   await sodium.ready;
-
   const encryptKey = sodium.randombytes_buf(sodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES);
-
   return encryptKey;
 }
 
@@ -39,16 +37,11 @@ export async function generate_key(): Promise<Uint8Array> {
  */
 export async function generate_key_From_Seed(seedString: string): Promise<Uint8Array> {
   await sodium.ready;
-
-  // Ensure the seed string is encoded as UTF-8 before generating the key.
   const seedBytes = sodium.from_string(seedString);
-
-  // Use the seed bytes to generate the key.
   const encryptKey = sodium.crypto_generichash(
     sodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES,
     seedBytes
   );
-
   return encryptKey;
 }
 
@@ -67,19 +60,16 @@ export async function encrypt_file_xchacha20(
   chunkIndex?: number | undefined
 ): Promise<Uint8Array> {
   await sodium.ready;
-
   const chunkSize = 262144; // 256 KB
   const encryptedFile: Uint8Array[] = [];
   let chunkIndexIntern = chunkIndex || 0;
 
   for (let i = 0; i < inputFile.length; i += chunkSize) {
     const chunk = inputFile.slice(i, i + chunkSize);
-
     const nonce = new Uint8Array(sodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES);
     const indexBytes = new Uint8Array(4);
     indexBytes.set(new Uint8Array(new Uint32Array([chunkIndexIntern]).buffer), 0);
     nonce.set(indexBytes, 0);
-
     const ciphertext = await sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
       chunk,
       null,
@@ -87,11 +77,9 @@ export async function encrypt_file_xchacha20(
       nonce,
       key
     );
-
     encryptedFile.push(ciphertext);
     chunkIndexIntern++;
   }
-
   return concatUint8Arrays(encryptedFile);
 }
 
@@ -101,25 +89,13 @@ export async function encrypt_file_xchacha20(
  * @returns A new Uint8Array that contains the concatenated values.
  */
 export function concatUint8Arrays(arrays: Uint8Array[]): Uint8Array {
-  // Calculate the total length of the concatenated array
   const totalLength = arrays.reduce((acc, array) => acc + array.length, 0);
-
-  // Create a new Uint8Array with the calculated total length
   const result = new Uint8Array(totalLength);
-
-  // Initialize the offset to keep track of the position within the result array
   let offset = 0;
-
-  // Iterate over each Uint8Array in the input array
   for (const array of arrays) {
-    // Set the current Uint8Array at the corresponding position in the result array
     result.set(array, offset);
-
-    // Update the offset by adding the length of the current Uint8Array
     offset += array.length;
   }
-
-  // Return the concatenated Uint8Array
   return result;
 }
 
@@ -133,38 +109,23 @@ export async function calculateB3hashFromFileEncrypt(
   file: File,
   encryptedKey: Uint8Array
 ): Promise<{ b3hash: Buffer; encryptedFileSize: number }> {
-  // Create a hash object
   const hasher = await blake3.create({});
-
-  // Define the chunk size (1 MB)
-  const chunkSize = 262144; // 256 KB;
-  // Initialize the position to 0
+  const chunkSize = 262144;
   let position = 0;
   let encryptedFileSize = 0;
   let chunkIndex = 0;
 
-  // Process the file in chunks
   while (position <= file.size) {
-    // Slice the file to extract a chunk
     const chunk = file.slice(position, position + chunkSize);
-
-    // Convert chunk's ArrayBuffer to hex string and log it
     const chunkArrayBuffer = await chunk.arrayBuffer();
     const chunkUint8Array = new Uint8Array(chunkArrayBuffer);
     const encryptedChunkUint8Array = await encrypt_file_xchacha20(chunkUint8Array, encryptedKey, 0x0, chunkIndex);
     encryptedFileSize += encryptedChunkUint8Array.length;
-
-    // Update the hash with the chunk's data
     hasher.update(encryptedChunkUint8Array);
-
-    // Move to the next position
     position += chunkSize;
     chunkIndex++;
   }
-
-  // Obtain the final hash value
   const b3hash = hasher.digest();
-  // Return the hash value as a Promise resolved to a Buffer
   return { b3hash: Buffer.from(b3hash), encryptedFileSize };
 }
 
@@ -175,16 +136,12 @@ export async function calculateB3hashFromFileEncrypt(
  */
 export function getKeyFromEncryptedCid(encryptedCid: string): string {
   const extensionIndex = encryptedCid.lastIndexOf(".");
-
   let cidWithoutExtension;
   if (extensionIndex !== -1) {
     cidWithoutExtension = encryptedCid.slice(0, extensionIndex);
   } else {
     cidWithoutExtension = encryptedCid;
   }
-  console.log("getKeyFromEncryptedCid: encryptedCid = ", encryptedCid);
-  console.log("getKeyFromEncryptedCid: cidWithoutExtension = ", cidWithoutExtension);
-
   cidWithoutExtension = cidWithoutExtension.slice(1);
   const cidBytes = convertBase64urlToBytes(cidWithoutExtension);
   const startIndex =
@@ -194,9 +151,7 @@ export function getKeyFromEncryptedCid(encryptedCid: string): string {
     ENCRYPTED_BLOB_HASH_LENGTH;
 
   const endIndex = startIndex + KEY_LENGTH;
-
   const selectedBytes = cidBytes.slice(startIndex, endIndex);
-
   const key = convertBytesToBase64url(selectedBytes);
   return key;
 }
@@ -209,10 +164,7 @@ export function getKeyFromEncryptedCid(encryptedCid: string): string {
 export function removeKeyFromEncryptedCid(encryptedCid: string): string {
   const extensionIndex = encryptedCid.lastIndexOf(".");
   const cidWithoutExtension = extensionIndex === -1 ? encryptedCid : encryptedCid.slice(0, extensionIndex);
-
-  // remove 'u' prefix as well
   const cidWithoutExtensionBytes = convertBase64urlToBytes(cidWithoutExtension.slice(1));
-
   const part1 = cidWithoutExtensionBytes.slice(
     0,
     CID_TYPE_ENCRYPTED_LENGTH +
@@ -221,11 +173,9 @@ export function removeKeyFromEncryptedCid(encryptedCid: string): string {
       ENCRYPTED_BLOB_HASH_LENGTH
   );
   const part2 = cidWithoutExtensionBytes.slice(part1.length + KEY_LENGTH);
-
   const combinedBytes = new Uint8Array(cidWithoutExtensionBytes.length - KEY_LENGTH);
   combinedBytes.set(part1);
   combinedBytes.set(part2, part1.length);
-
   const cidWithoutKey = "u" + convertBytesToBase64url(combinedBytes);
   return cidWithoutKey;
 }
@@ -242,11 +192,8 @@ export function combineKeytoEncryptedCid(key: string, encryptedCidWithoutKey: st
     extensionIndex === -1 ? encryptedCidWithoutKey : encryptedCidWithoutKey.slice(0, extensionIndex);
 
   const encryptedCidWithoutKeyBytes = convertBase64urlToBytes(cidWithoutKeyAndExtension.slice(1));
-
   const keyBytes = convertBase64urlToBytes(key);
-
   const combinedBytes = new Uint8Array(encryptedCidWithoutKeyBytes.length + keyBytes.length);
-
   const part1 = encryptedCidWithoutKeyBytes.slice(
     0,
     CID_TYPE_ENCRYPTED_LENGTH +
@@ -255,11 +202,9 @@ export function combineKeytoEncryptedCid(key: string, encryptedCidWithoutKey: st
       ENCRYPTED_BLOB_HASH_LENGTH
   );
   const part2 = encryptedCidWithoutKeyBytes.slice(part1.length);
-
   combinedBytes.set(part1);
   combinedBytes.set(keyBytes, part1.length);
   combinedBytes.set(part2, part1.length + keyBytes.length);
-
   const encryptedCid = `u` + convertBytesToBase64url(combinedBytes);
   return encryptedCid;
 }
@@ -271,13 +216,8 @@ export function combineKeytoEncryptedCid(key: string, encryptedCidWithoutKey: st
  */
 export function convertBytesToBase64url(hashBytes: Uint8Array): string {
   const mHash = Buffer.from(hashBytes);
-
-  // Convert the hash Buffer to a Base64 string
   const hashBase64 = mHash.toString("base64");
-
-  // Make the Base64 string URL-safe
   const hashBase64url = hashBase64.replace(/\+/g, "-").replace(/\//g, "_").replace("=", "");
-
   return hashBase64url;
 }
 
@@ -287,20 +227,12 @@ export function convertBytesToBase64url(hashBytes: Uint8Array): string {
  * @returns {Uint8Array} - The Uint8Array containing the bytes.
  */
 export function convertBase64urlToBytes(b64url: string): Uint8Array {
-  // Convert the URL-safe Base64 string to a regular Base64 string
   let b64 = b64url.replace(/-/g, "+").replace(/_/g, "/");
-
-  // Add missing padding
   while (b64.length % 4) {
     b64 += "=";
   }
-
-  // Convert Base64 string to Buffer
   const buffer = Buffer.from(b64, "base64");
-
-  // Convert Buffer to Uint8Array
   const mHash = Uint8Array.from(buffer);
-
   return mHash;
 }
 
@@ -369,21 +301,12 @@ export async function encryptFile(
     };
   });
   const fileContents = new Uint8Array(reader.result as ArrayBuffer);
-
-  // Call the function to encrypt the file
   const encryptedFileBytes = await encrypt_file_xchacha20(fileContents, encryptedKey, 0x0);
-
-  // Convert Uint8Array to Blob
   const blob = new Blob([encryptedFileBytes], { type: "application/octet-stream" });
-
-  // Convert Blob to File
   const encryptedFile = new File([blob], filename, { type: "application/octet-stream", lastModified: Date.now() });
-
   const b3hash = await calculateB3hashFromFile(encryptedFile);
   const encryptedBlobHash = Buffer.concat([Buffer.alloc(1, mhashBlake3Default), b3hash]);
-
   const padding = 0;
-
   const encryptedCidBytes = createEncryptedCid(
     cidTypeEncrypted,
     encryptionAlgorithmXChaCha20Poly1305,
@@ -393,9 +316,7 @@ export async function encryptFile(
     padding,
     cid
   );
-
   const encryptedCid = "u" + convertMHashToB64url(Buffer.from(encryptedCidBytes));
-
   return {
     encryptedFile,
     encryptedCid,
@@ -415,14 +336,10 @@ export function getEncryptedStreamReader(
   file: File,
   encryptedKey: Uint8Array
 ): ReadableStreamDefaultReader<Uint8Array> {
-  // Creates a ReadableStream from a File object, encrypts the stream using a transformer,
-  // and returns a ReadableStreamDefaultReader for the encrypted stream.
-
   const fileStream = file.stream();
   const transformerEncrypt = getTransformerEncrypt(encryptedKey);
   const encryptedFileStream = fileStream.pipeThrough(transformerEncrypt);
   const reader = encryptedFileStream.getReader();
-
   return reader;
 }
 
