@@ -11,6 +11,7 @@ export const cidTypeBridge = 0x3a;
 export const cidTypeEncrypted = 0xae;
 // ! indicates that the registry entry contains a S5 CID
 export const registryS5MagicByte = 0x5a;
+export const registryS5CIDByte = 0x5a;
 // ! some multicodec bytes
 // BLAKE3 with default output size of 256 bits
 export const mhashBlake3Default = 0x1f;

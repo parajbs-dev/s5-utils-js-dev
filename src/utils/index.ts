@@ -40,57 +40,18 @@ export {
   createDownloadFromBlob,
 } from "./blobtools";
 
-// decrypt exports.
-export {
-  decryptFileXchacha20,
-  hashStream,
-  decryptStream,
-  decryptFile,
-  compareB3hash,
-  getEncryptedFileUrl,
-  decodeEndian,
-  hashToBase64UrlNoPadding,
-  _base64ToUint8Array,
-  streamingUrlCache,
-  getStreamingLocation,
-  getS5LocationsApiHost,
-  checkOptsLocationsAPI,
-} from "./decrypt";
-
-// decrypt type exports.
-export type {
-  DecryptedBlobObject,
-  EncryptionMetadata,
-  EncryptedFileUrlResponse,
-} from "./decrypt";
-
-// encryptV2 exports.
-export {
-  chunkSizeAsPowerOf2,
-  CID_TYPE_ENCRYPTED_LENGTH,
-  ENCRYPTION_ALGORITHM_LENGTH,
-  CHUNK_LENGTH_AS_POWEROF2_LENGTH,
-  ENCRYPTED_BLOB_HASH_LENGTH,
-  KEY_LENGTH,
-  generate_key,
-  generate_key_From_Seed,
-  encrypt_file_xchacha20,
-  concatUint8Arrays,
-  calculateB3hashFromFileEncrypt,
-  getKeyFromEncryptedCid,
-  removeKeyFromEncryptedCid,
-  combineKeytoEncryptedCid,
-  convertBytesToBase64url,
-  convertBase64urlToBytes,
-  createEncryptedCid,
-  encryptFile,
-  getEncryptedStreamReader,
-  getTransformerEncrypt,
-} from "./encryptV2";
-
 export { getFileMimeType } from "./file";
 
-export { trimPrefix, trimSuffix } from "./string";
+// string exports.
+export {
+  trimPrefix,
+  trimSuffix,
+  toHexString,
+  stringToUint8ArrayUtf8,
+  uint8ArrayToStringUtf8,
+  encodeUtf8String,
+  generateRandomString,
+} from "./string";
 
 // tools exports.
 export {
@@ -142,6 +103,7 @@ export {
   cidTypeBridge,
   cidTypeEncrypted,
   registryS5MagicByte,
+  registryS5CIDByte,
   mhashBlake3Default,
   mkeyEd25519,
   encryptionAlgorithmXChaCha20Poly1305,

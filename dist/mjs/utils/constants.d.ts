@@ -6,6 +6,7 @@ export declare const cidTypeUserIdentity = 119;
 export declare const cidTypeBridge = 58;
 export declare const cidTypeEncrypted = 174;
 export declare const registryS5MagicByte = 90;
+export declare const registryS5CIDByte = 90;
 export declare const mhashBlake3Default = 31;
 export declare const mkeyEd25519 = 237;
 export declare const encryptionAlgorithmXChaCha20Poly1305 = 166;

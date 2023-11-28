@@ -2,6 +2,7 @@ const path = require("path");
 
 module.exports = {
   entry: "./src/index.ts",
+  devtool: false,
   mode: "production",
 
   module: {
@@ -31,7 +32,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "./dist/bundle"),
     // The filename needs to match the index.web.d.ts declarations file.
-    filename: "s5-utils.js",
+    filename: "index.js",
     library: "s5Utils",
     libraryTarget: "umd",
   },
