@@ -16,45 +16,45 @@ export declare function numToBuf(value1: number, bufferSize: number): Buffer;
 export declare function bufToNum(buffer: Buffer): number;
 /**
  * Encodes a CID (Content Identifier) with a prefix "z" using base58btc-encoding.
- * @param bytes The Buffer object representing the Bitcoin address.
+ * @param bytes The Uint8Array object representing the Bitcoin address.
  * @returns The Cid with the prefix "z".
  */
-export declare function encodeCIDWithPrefixZ(bytes: Buffer): string;
+export declare function encodeCIDWithPrefixZ(bytes: Uint8Array): string;
 /**
  * Decodes a CID (Content Identifier) with a prefix 'z' if present.
  * @param cid - The CID to decode.
- * @returns A Buffer containing the decoded CID.
+ * @returns A Uint8Array containing the decoded CID.
  * @throws Error if the input address is invalid.
  */
-export declare function decodeCIDWithPrefixZ(cid: string): Buffer;
+export declare function decodeCIDWithPrefixZ(cid: string): Uint8Array;
 /**
  * Encodes a CID (Content Identifier) with a "u" prefix using base64url-encoding.
- * @param bytes The input CID as a Buffer object.
+ * @param bytes The input CID as a Uint8Array object.
  * @returns The encoded CID with the "u" prefix as a string.
  */
-export declare function encodeCIDWithPrefixU(bytes: Buffer): string;
+export declare function encodeCIDWithPrefixU(bytes: Uint8Array): string;
 /**
- * Decodes a Content Identifier (CID) with a prefix 'u' and returns the decoded bytes as a Buffer.
+ * Decodes a Content Identifier (CID) with a prefix 'u' and returns the decoded bytes as a Uint8Array.
  * @param cid The CID to decode, either prefixed with 'u' or already decoded.
- * @returns A Buffer containing the decoded bytes of the CID.
+ * @returns A Uint8Array containing the decoded bytes of the CID.
  * @throws Error Throws an error for an invalid 'u' CID format.
  */
-export declare function decodeCIDWithPrefixU(cid: string): Buffer;
+export declare function decodeCIDWithPrefixU(cid: string): Uint8Array;
 /**
  * Encodes the given bytes using Base32rfc-encoding and prefixes the result with 'b'.
  * @param bytes - The bytes to encode (should have a length of 38).
  * @returns The encoded string prefixed with 'b', or an empty string if the input is invalid.
  */
-export declare function encodeCIDWithPrefixB(bytes: Buffer): string;
+export declare function encodeCIDWithPrefixB(bytes: Uint8Array): string;
 /**
- * Decodes a CID (Content Identifier) with a prefix 'B' or 'b' and returns the decoded bytes as a Buffer object.
+ * Decodes a CID (Content Identifier) with a prefix 'B' or 'b' and returns the decoded bytes as a Uint8Array object.
  * If the CID starts with 'B' and contains any uppercase letters, it converts the CID to lowercase and removes the 'B' prefix.
  * If the CID starts with 'b' and contains any lowercase letters, it removes the 'b' prefix.
  * If the CID contains any lowercase letters, it converts all characters to uppercase.
  * @param cid The CID string to decode.
- * @returns The decoded CID bytes as a Buffer object.
+ * @returns The decoded CID bytes as a Uint8Array object.
  */
-export declare function decodeCIDWithPrefixB(cid: string): Buffer;
+export declare function decodeCIDWithPrefixB(cid: string): Uint8Array;
 /**
  * Converts a Base58btc-encoded CID to a Base32rfc-encoded CID.
  * @param cid - The Base58btc-encoded CID string to convert.

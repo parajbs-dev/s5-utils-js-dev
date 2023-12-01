@@ -51,4 +51,6 @@ export declare const storageLocationTypeArchive = 0;
 export declare const storageLocationTypeFile = 3;
 export declare const storageLocationTypeFull = 5;
 export declare const storageLocationTypeBridge = 7;
+export declare const MAX_REVISION = 281474976710655;
+export declare const MAX_REVISION_DELETE = 281474976710656;
 //# sourceMappingURL=constants.d.ts.map

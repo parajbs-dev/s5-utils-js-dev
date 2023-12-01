@@ -175,19 +175,19 @@ export function convertS5CidToMHash(cid) {
         // Decode the CID using decodeCIDWithPrefixZ function
         const cidBytes = decodeCIDWithPrefixZ(cid);
         // Get the mHash from the decoded CID using extractMHashFromCID function
-        mhash = extractMHashFromCID(cidBytes);
+        mhash = extractMHashFromCID(Buffer.from(cidBytes));
     }
     else if (cid[0] === "u") {
         // Decode the CID using decodeCIDWithPrefixU function
         const cidBytes = decodeCIDWithPrefixU(cid);
         // Get the mHash from the decoded CID using extractMHashFromCID function
-        mhash = extractMHashFromCID(cidBytes);
+        mhash = extractMHashFromCID(Buffer.from(cidBytes));
     }
     else if (cid[0] === "b") {
         // Decode the CID using decodeCIDWithPrefixB function
         const cidBytes = decodeCIDWithPrefixB(cid);
         // Get the mHash from the decoded CID using extractMHashFromCID function
-        mhash = extractMHashFromCID(cidBytes);
+        mhash = extractMHashFromCID(Buffer.from(cidBytes));
     }
     else {
         // Invalid CID input address
@@ -262,17 +262,17 @@ export function convertS5CidToB3hashHex(cid) {
     if (cid[0] === "z") {
         // Decode the CID using decodeCIDWithPrefixZ function
         const zcidBytes = decodeCIDWithPrefixZ(cid);
-        b3hash = extractB3hashFromCID(zcidBytes);
+        b3hash = extractB3hashFromCID(Buffer.from(zcidBytes));
     }
     if (cid[0] === "u") {
         // Decode the CID using decodeCIDWithPrefixU function
         const ucidBytes = decodeCIDWithPrefixU(cid);
-        b3hash = extractB3hashFromCID(ucidBytes);
+        b3hash = extractB3hashFromCID(Buffer.from(ucidBytes));
     }
     if (cid[0] === "b") {
         // Decode the CID using decodeCIDWithPrefixB function
         const bcidBytes = decodeCIDWithPrefixB(cid);
-        b3hash = extractB3hashFromCID(bcidBytes);
+        b3hash = extractB3hashFromCID(Buffer.from(bcidBytes));
     }
     if (b3hash != null) {
         return b3hash.toString("hex");
@@ -298,10 +298,10 @@ export function getAllInfosFromCid(cid) {
     if (cid[0] === "z") {
         // Decode the CID using decodeCIDWithPrefixZ function
         const zcidBytes = decodeCIDWithPrefixZ(cid);
-        zCid = encodeCIDWithPrefixZ(zcidBytes);
-        uCid = encodeCIDWithPrefixU(zcidBytes);
-        bCid = encodeCIDWithPrefixB(zcidBytes);
-        b3FilesSize = extractRawSizeFromCID(zcidBytes);
+        zCid = encodeCIDWithPrefixZ(Buffer.from(zcidBytes));
+        uCid = encodeCIDWithPrefixU(Buffer.from(zcidBytes));
+        bCid = encodeCIDWithPrefixB(Buffer.from(zcidBytes));
+        b3FilesSize = extractRawSizeFromCID(Buffer.from(zcidBytes));
         if (b3FilesSize != 0) {
             mHashBase64url = convertS5CidToMHashB64url(cid);
             b3hashHex = convertS5CidToB3hashHex(cid);
@@ -314,10 +314,10 @@ export function getAllInfosFromCid(cid) {
     else if (cid[0] === "u") {
         // Decode the CID using decodeCIDWithPrefixU function
         const ucidBytes = decodeCIDWithPrefixU(cid);
-        zCid = encodeCIDWithPrefixZ(ucidBytes);
-        uCid = encodeCIDWithPrefixU(ucidBytes);
-        bCid = encodeCIDWithPrefixB(ucidBytes);
-        b3FilesSize = extractRawSizeFromCID(ucidBytes);
+        zCid = encodeCIDWithPrefixZ(Buffer.from(ucidBytes));
+        uCid = encodeCIDWithPrefixU(Buffer.from(ucidBytes));
+        bCid = encodeCIDWithPrefixB(Buffer.from(ucidBytes));
+        b3FilesSize = extractRawSizeFromCID(Buffer.from(ucidBytes));
         if (b3FilesSize != 0) {
             mHashBase64url = convertS5CidToMHashB64url(cid);
             b3hashHex = convertS5CidToB3hashHex(cid);
@@ -330,10 +330,10 @@ export function getAllInfosFromCid(cid) {
     else if (cid[0] === "b") {
         // Decode the CID using decodeCIDWithPrefixB function
         const bcidBytes = decodeCIDWithPrefixB(cid);
-        zCid = encodeCIDWithPrefixZ(bcidBytes);
-        uCid = encodeCIDWithPrefixU(bcidBytes);
-        bCid = encodeCIDWithPrefixB(bcidBytes);
-        b3FilesSize = extractRawSizeFromCID(bcidBytes);
+        zCid = encodeCIDWithPrefixZ(Buffer.from(bcidBytes));
+        uCid = encodeCIDWithPrefixU(Buffer.from(bcidBytes));
+        bCid = encodeCIDWithPrefixB(Buffer.from(bcidBytes));
+        b3FilesSize = extractRawSizeFromCID(Buffer.from(bcidBytes));
         if (b3FilesSize != 0) {
             mHashBase64url = convertS5CidToMHashB64url(cid);
             b3hashHex = convertS5CidToB3hashHex(cid);

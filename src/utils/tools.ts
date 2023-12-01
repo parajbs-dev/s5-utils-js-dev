@@ -65,10 +65,10 @@ export function bufToNum(buffer: Buffer): number {
 
 /**
  * Encodes a CID (Content Identifier) with a prefix "z" using base58btc-encoding.
- * @param bytes The Buffer object representing the Bitcoin address.
+ * @param bytes The Uint8Array object representing the Bitcoin address.
  * @returns The Cid with the prefix "z".
  */
-export function encodeCIDWithPrefixZ(bytes: Buffer): string {
+export function encodeCIDWithPrefixZ(bytes: Uint8Array): string {
   // Check if the bytes has a length of 38 (standard uncompressed Bitcoin address)
   if (bytes.length === 38) {
     // Encode the input address using base58 encoding
@@ -87,10 +87,10 @@ export function encodeCIDWithPrefixZ(bytes: Buffer): string {
 /**
  * Decodes a CID (Content Identifier) with a prefix 'z' if present.
  * @param cid - The CID to decode.
- * @returns A Buffer containing the decoded CID.
+ * @returns A Uint8Array containing the decoded CID.
  * @throws Error if the input address is invalid.
  */
-export function decodeCIDWithPrefixZ(cid: string): Buffer {
+export function decodeCIDWithPrefixZ(cid: string): Uint8Array {
   if (cid[0] === "z") {
     const zCidBytes = decodeBase58BTC(cid.substring(1));
     return zCidBytes;
@@ -107,10 +107,10 @@ export function decodeCIDWithPrefixZ(cid: string): Buffer {
 
 /**
  * Encodes a CID (Content Identifier) with a "u" prefix using base64url-encoding.
- * @param bytes The input CID as a Buffer object.
+ * @param bytes The input CID as a Uint8Array object.
  * @returns The encoded CID with the "u" prefix as a string.
  */
-export function encodeCIDWithPrefixU(bytes: Buffer): string {
+export function encodeCIDWithPrefixU(bytes: Uint8Array): string {
   // Check if the input CID is of length 38.
   if (bytes.length === 38) {
     // Encode the CID using base64url-encoding and prefix it with "u".
@@ -127,12 +127,12 @@ export function encodeCIDWithPrefixU(bytes: Buffer): string {
 }
 
 /**
- * Decodes a Content Identifier (CID) with a prefix 'u' and returns the decoded bytes as a Buffer.
+ * Decodes a Content Identifier (CID) with a prefix 'u' and returns the decoded bytes as a Uint8Array.
  * @param cid The CID to decode, either prefixed with 'u' or already decoded.
- * @returns A Buffer containing the decoded bytes of the CID.
+ * @returns A Uint8Array containing the decoded bytes of the CID.
  * @throws Error Throws an error for an invalid 'u' CID format.
  */
-export function decodeCIDWithPrefixU(cid: string): Buffer {
+export function decodeCIDWithPrefixU(cid: string): Uint8Array {
   if (cid[0] === "u") {
     const uCidBytes = decodeBase64URL(cid.substring(1));
     return uCidBytes;
@@ -153,7 +153,7 @@ export function decodeCIDWithPrefixU(cid: string): Buffer {
  * @param bytes - The bytes to encode (should have a length of 38).
  * @returns The encoded string prefixed with 'b', or an empty string if the input is invalid.
  */
-export function encodeCIDWithPrefixB(bytes: Buffer): string {
+export function encodeCIDWithPrefixB(bytes: Uint8Array): string {
   if (bytes.length === 38) {
     const bCid = "b" + encodeBase32RFC(bytes).toLowerCase();
     return bCid;
@@ -166,28 +166,28 @@ export function encodeCIDWithPrefixB(bytes: Buffer): string {
 }
 
 /**
- * Decodes a CID (Content Identifier) with a prefix 'B' or 'b' and returns the decoded bytes as a Buffer object.
+ * Decodes a CID (Content Identifier) with a prefix 'B' or 'b' and returns the decoded bytes as a Uint8Array object.
  * If the CID starts with 'B' and contains any uppercase letters, it converts the CID to lowercase and removes the 'B' prefix.
  * If the CID starts with 'b' and contains any lowercase letters, it removes the 'b' prefix.
  * If the CID contains any lowercase letters, it converts all characters to uppercase.
  * @param cid The CID string to decode.
- * @returns The decoded CID bytes as a Buffer object.
+ * @returns The decoded CID bytes as a Uint8Array object.
  */
-export function decodeCIDWithPrefixB(cid: string): Buffer {
+export function decodeCIDWithPrefixB(cid: string): Uint8Array {
   if (cid[0] === "B" && /[A-Z]/.test(cid)) {
-    cid = cid.toLowerCase(); // Convert the CID to lowercase
-    cid = cid.substring(1); // Remove the first character ("B")
+    cid = cid.toLowerCase();
+    cid = cid.substring(1);
   }
 
   if (cid[0] === "b" && /[a-z]/.test(cid)) {
-    cid = cid.substring(1); // Remove the first character ("b")
+    cid = cid.substring(1);
   }
 
   if (/[a-z]/.test(cid)) {
-    cid = cid.toUpperCase(); // Convert all characters to uppercase
+    cid = cid.toUpperCase();
   }
 
-  const bCidBytes = decodeBase32RFC(cid); // Assuming decodeBase32RFC is defined elsewhere
+  const bCidBytes = decodeBase32RFC(cid);
   return bCidBytes;
 }
 
@@ -230,7 +230,7 @@ export function convertB32rfcToB58btcCid(cid: string): string {
  */
 export function convertB64urlToB58btcCid(cid: string): string {
   // Decode the base58btc-encoded CID using decodeBase58BTC function.
-  const decoded: Buffer = decodeBase64URL(cid.substring(1));
+  const decoded: Uint8Array = decodeBase64URL(cid.substring(1));
 
   // Encode the decoded binary data as base58btc using encodeBase58BTC function.
   const encoded: string = encodeBase58BTC(decoded);
@@ -246,7 +246,7 @@ export function convertB64urlToB58btcCid(cid: string): string {
  */
 export function convertB58btcToB64urlCid(cid: string): string {
   // Decode the base58btc-encoded CID using decodeBase58BTC function.
-  const decoded: Buffer = decodeBase58BTC(cid.substring(1));
+  const decoded: Uint8Array = decodeBase58BTC(cid.substring(1));
 
   // Encode the decoded binary data as base64url using encodeBase64URL function.
   const encoded: string = encodeBase64URL(decoded);

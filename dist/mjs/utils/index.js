@@ -6,7 +6,11 @@ export { encodeBase58BTC, decodeBase58BTC, encodeBase32RFC, decodeBase32RFC, enc
 export { calculateB3hashFromFile, calculateB3hashFromArray, generateMHashFromB3hash, extractB3hashFromMHash, generateCIDFromMHash, extractMHashFromCID, extractRawSizeFromCID, extractB3hashFromCID, convertMHashToB64url, convertS5CidToMHash, convertS5CidToCIDBytes, checkRawSizeIsNotNull, convertS5CidToMHashB64url, convertS5CidToB3hashHex, getAllInfosFromCid, } from "./blake3tools";
 // blobtools exports.
 export { createVideoElementFromBlob, createVideoPageInNewTab, createDownloadFromBlob, } from "./blobtools";
+// datatools exports.
+export { isValidData, checkResponseData, incrementAndCheckRevision, } from "./datatools";
 export { getFileMimeType } from "./file";
+// jsontools exports.
+export { JSONparse, JSONstringify, isJson, } from "./jsontools";
 // string exports.
 export { trimPrefix, trimSuffix, toHexString, stringToUint8ArrayUtf8, uint8ArrayToStringUtf8, encodeUtf8String, generateRandomString, } from "./string";
 // tools exports.
@@ -19,4 +23,4 @@ export { cidTypeRaw, cidTypeMetadataMedia,
 //  cidTypeMetadataFile,
 cidTypeMetadataWebApp, cidTypeResolver, cidTypeUserIdentity, cidTypeBridge, cidTypeEncrypted, registryS5MagicByte, registryS5CIDByte, mhashBlake3Default, mkeyEd25519, encryptionAlgorithmXChaCha20Poly1305, encryptionAlgorithmXChaCha20Poly1305NonceSize, metadataMagicByte, metadataTypeMedia, metadataTypeWebApp, metadataTypeDirectory, metadataTypeProofs, metadataTypeUserIdentity, parentLinkTypeUserIdentity, registryMaxDataSize, authPayloadVersion1, userIdentityLinkProfile, userIdentityLinkPublicFileSystem, 
 //  userIdentityLinkFollowingList,
-protocolMethodHandshakeOpen, protocolMethodHandshakeDone, protocolMethodSignedMessage, protocolMethodHashQuery, protocolMethodAnnouncePeers, protocolMethodRegistryQuery, recordTypeStorageLocation, recordTypeRegistryEntry, metadataExtensionLicenses, metadataExtensionDonationKeys, metadataExtensionWikidataClaims, metadataExtensionLanguages, metadataExtensionSourceUris, metadataExtensionUpdateCID, metadataExtensionPreviousVersions, metadataExtensionTimestamp, metadataExtensionTags, metadataExtensionCategories, metadataExtensionViewTypes, metadataExtensionBasicMediaMetadata, metadataExtensionBridge, metadataMediaDetailsDuration, metadataMediaDetailsIsLive, metadataProofTypeSignature, metadataProofTypeTimestamp, storageLocationTypeArchive, storageLocationTypeFile, storageLocationTypeFull, storageLocationTypeBridge, } from "./constants";
+protocolMethodHandshakeOpen, protocolMethodHandshakeDone, protocolMethodSignedMessage, protocolMethodHashQuery, protocolMethodAnnouncePeers, protocolMethodRegistryQuery, recordTypeStorageLocation, recordTypeRegistryEntry, metadataExtensionLicenses, metadataExtensionDonationKeys, metadataExtensionWikidataClaims, metadataExtensionLanguages, metadataExtensionSourceUris, metadataExtensionUpdateCID, metadataExtensionPreviousVersions, metadataExtensionTimestamp, metadataExtensionTags, metadataExtensionCategories, metadataExtensionViewTypes, metadataExtensionBasicMediaMetadata, metadataExtensionBridge, metadataMediaDetailsDuration, metadataMediaDetailsIsLive, metadataProofTypeSignature, metadataProofTypeTimestamp, storageLocationTypeArchive, storageLocationTypeFile, storageLocationTypeFull, storageLocationTypeBridge, MAX_REVISION, MAX_REVISION_DELETE, } from "./constants";

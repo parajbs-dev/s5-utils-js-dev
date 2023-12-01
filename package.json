@@ -1,6 +1,6 @@
 {
   "name": "s5-utils-js-dev",
-  "version": "0.1.0-beta8-3-3-4",
+  "version": "0.1.0-beta8-3-3-5",
   "description": "S5 Utils Javascript",
   "types": "dist/mjs/index.d.ts",
   "module": "dist/mjs/index.js",

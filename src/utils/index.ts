@@ -40,7 +40,21 @@ export {
   createDownloadFromBlob,
 } from "./blobtools";
 
+// datatools exports.
+export {
+  isValidData,
+  checkResponseData,
+  incrementAndCheckRevision,
+} from "./datatools";
+
 export { getFileMimeType } from "./file";
+
+// jsontools exports.
+export {
+  JSONparse,
+  JSONstringify,
+  isJson,
+} from "./jsontools";
 
 // string exports.
 export {
@@ -149,4 +163,6 @@ export {
   storageLocationTypeFile,
   storageLocationTypeFull,
   storageLocationTypeBridge,
+  MAX_REVISION,
+  MAX_REVISION_DELETE,
 } from "./constants";

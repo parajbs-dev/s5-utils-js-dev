@@ -80,3 +80,5 @@ export const storageLocationTypeArchive = 0;
 export const storageLocationTypeFile = 3;
 export const storageLocationTypeFull = 5;
 export const storageLocationTypeBridge = 7;
+export const MAX_REVISION = 281474976710655;
+export const MAX_REVISION_DELETE = 281474976710656;
